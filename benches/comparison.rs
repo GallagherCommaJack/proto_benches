@@ -27,8 +27,10 @@ fn prepare_cens() -> (Vec<PK>, HashMap<CEN, i64, HashHasherBuilder>) {
 
 fn bench_jack_approach(c: &mut Criterion) {
     let (pks, cens) = prepare_cens();
+    let mut group = c.benchmark_group("Jack approaches");
+    group.throughput(Throughput::Bytes(32));
 
-    c.bench_function("jack approach baseline", |b| {
+    group.bench_function("jack approach baseline", |b| {
         let mut i = 0;
         b.iter(|| {
             check_cen_membership(black_box(&cens), pks[i % pks.len()], calculate_cens_hashing);
@@ -36,7 +38,7 @@ fn bench_jack_approach(c: &mut Criterion) {
         });
     });
 
-    c.bench_function("jack approach batched", |b| {
+    group.bench_function("jack approach batched", |b| {
         let mut i = 0;
         b.iter(|| {
             check_cen_membership(
@@ -48,7 +50,7 @@ fn bench_jack_approach(c: &mut Criterion) {
         });
     });
 
-    c.bench_function("jack approach chacha", |b| {
+    group.bench_function("jack approach chacha", |b| {
         let mut i = 0;
         b.iter(|| {
             check_cen_membership(black_box(&cens), pks[i % pks.len()], calculate_cens_chacha8);
@@ -61,7 +63,10 @@ fn bench_manu_approach(c: &mut Criterion) {
     let (pks, cens) = prepare_cens();
     let cens: Vec<_> = cens.into_iter().collect();
 
-    c.bench_function("manu approach soft", |b| {
+    let mut group = c.benchmark_group("Manu approaches");
+    group.throughput(Throughput::Bytes(32));
+
+    group.bench_function("manu approach soft", |b| {
         let mut i = 0;
         b.iter(|| {
             check_cen_manu(black_box(&cens), pks[i % pks.len()]);
@@ -69,7 +74,7 @@ fn bench_manu_approach(c: &mut Criterion) {
         });
     });
 
-    c.bench_function("manu approach ni", |b| {
+    group.bench_function("manu approach ni", |b| {
         let mut i = 0;
         b.iter(|| {
             check_cen_manu_ni(black_box(&cens), pks[i % pks.len()]);
