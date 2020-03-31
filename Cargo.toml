@@ -11,7 +11,7 @@ aes-soft = "0.3.3"
 blake3 = "0.2.2"
 generic-array = "0.12"
 block-cipher-trait = "0.6.2"
-aesni = "0.6.0"
+aesni = {version = "0.6.0", optional = true}
 rand = "0.7.3"
 rand_chacha = "0.2.2"
 

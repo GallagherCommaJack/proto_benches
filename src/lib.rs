@@ -95,6 +95,7 @@ pub fn check_cen_manu(log: &[(CEN, i64)], pk: PK) -> Option<i64> {
         .max()
 }
 
+#[cfg(feature = "aesni")]
 pub fn check_cen_manu_ni(log: &[(CEN, i64)], pk: PK) -> Option<i64> {
     use aesni::Aes128;
     use block_cipher_trait::BlockCipher;

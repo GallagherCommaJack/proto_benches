@@ -74,6 +74,7 @@ fn bench_manu_approach(c: &mut Criterion) {
         });
     });
 
+    #[cfg(feature = "aesni")]
     group.bench_function("manu approach ni", |b| {
         let mut i = 0;
         b.iter(|| {
